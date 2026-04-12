@@ -53,6 +53,7 @@ export default function HomePage() {
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [showNotice, setShowNotice] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
@@ -163,6 +164,7 @@ export default function HomePage() {
     )
   }
 
+
   return (
     <div style={{ background: 'var(--bg)', minHeight: '100vh' }}>
 
@@ -192,7 +194,6 @@ export default function HomePage() {
         {/* 文字內容 */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4"
           style={{ zIndex: 3 }}>
-          <div className="text-4xl mb-3">🌰</div>
           <h1 className="text-3xl md:text-5xl font-medium text-white mb-3"
             style={{ textShadow: '0 2px 16px rgba(0,0,0,0.4)', letterSpacing: '-0.02em' }}>
             杏仁弟弟
@@ -200,6 +201,86 @@ export default function HomePage() {
           <p className="text-white/80 text-sm md:text-base">
             手工杏仁甜品，限時現場取貨
           </p>
+        </div>
+      </section>
+
+      {/* ── 訂購須知 ── */}
+      <section className="max-w-lg mx-auto px-4 pt-6 pb-2">
+        <div className="rounded-2xl overflow-hidden"
+          style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+
+          {/* 標題列（可點擊） */}
+          <button
+            onClick={() => setShowNotice(v => !v)}
+            className="w-full px-5 py-4 flex items-center gap-3 transition-all"
+            style={{ background: 'var(--accent)' }}>
+            <div className="text-2xl">📋</div>
+            <div className="flex-1 text-left">
+              <div className="font-medium text-white" style={{ fontSize: '1.05rem' }}>訂購須知</div>
+              <div className="text-white/70" style={{ fontSize: '0.75rem' }}>
+                {showNotice ? '點擊收合' : '點擊展開查看'}
+              </div>
+            </div>
+            <div className="text-white/80 transition-transform duration-300"
+              style={{ transform: showNotice ? 'rotate(180deg)' : 'rotate(0deg)', fontSize: '1.2rem' }}>
+              ▾
+            </div>
+          </button>
+
+          {/* 須知內容（可收合） */}
+          <div style={{
+            maxHeight: showNotice ? '600px' : '0px',
+            overflow: 'hidden',
+            transition: 'max-height 0.35s ease',
+          }}>
+            <div className="divide-y" style={{ borderColor: 'var(--border)' }}>
+              {[
+                {
+                  icon: '📅',
+                  text: '我們皆已安排下一週的日期與行程，於約定的時間地點取貨與現場付款。',
+                },
+                {
+                  icon: '🌰',
+                  text: '杏仁弟弟產品為確保新鮮品質，皆為接單後開始製作。',
+                },
+                {
+                  icon: '🛵',
+                  text: '大台北地區滿 2,000 元即可外送，部分地區會因路途稍做調整。',
+                },
+                {
+                  icon: '🎁',
+                  text: '全品項滿 300 元，再送一顆杏仁豆腐。',
+                },
+                {
+                  icon: '📞',
+                  text: '有問題可以來電',
+                  highlight: '0937-883-893 ／ 徐鋒',
+                  href: 'tel:0937883893',
+                },
+              ].map((item, i) => (
+                <div key={i} className="flex gap-4 px-5 py-4 items-start">
+                  <div className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-xl"
+                    style={{ background: 'var(--accent-light)' }}>
+                    {item.icon}
+                  </div>
+                  <div className="flex-1 pt-1" style={{ color: 'var(--text)', lineHeight: '1.6' }}>
+                    {item.text}
+                    {item.highlight && item.href && (
+                      <>
+                        {' '}
+                        <a href={item.href}
+                          className="font-medium"
+                          style={{ color: 'var(--accent)', textDecoration: 'none' }}>
+                          {item.highlight}
+                        </a>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -213,7 +294,7 @@ export default function HomePage() {
               目前尚無排定行程，請稍後再來
             </div>
           ) : (
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-2 gap-2">
               {schedules.map(s => (
                 <button key={s.date}
                   onClick={() => {
@@ -221,7 +302,7 @@ export default function HomePage() {
                     setSelectedPoint(null)
                     setFieldErrors(prev => ({ ...prev, date: '', point: '' }))
                   }}
-                  className="px-4 py-2 rounded-xl text-sm transition-all"
+                  className="w-full py-3 rounded-xl transition-all"
                   style={{
                     background: selectedDate === s.date ? 'var(--accent)' : 'var(--surface)',
                     color: selectedDate === s.date ? '#fff' : 'var(--text)',
@@ -229,7 +310,7 @@ export default function HomePage() {
                     fontWeight: selectedDate === s.date ? 500 : 400,
                   }}>
                   <div>{formatDateLabel(s.date)}</div>
-                  <div className="text-xs mt-0.5 opacity-75">{s.district}</div>
+                  <div className="mt-0.5 opacity-75" style={{ fontSize: '0.75em' }}>{s.district}</div>
                 </button>
               ))}
             </div>
