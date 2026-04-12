@@ -8,10 +8,15 @@
   --text-muted: #6b6b67;
   --accent: #8b5e3c;
   --accent-light: #f5ede4;
+
+  /* 基礎字體大小，從 16px 放大到 20px */
+  font-size: 20px;
 }
 
 body {
   background: var(--bg);
   color: var(--text);
   font-family: -apple-system, 'Hiragino Sans', 'PingFang TC', sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
 }
