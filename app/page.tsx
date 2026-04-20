@@ -194,12 +194,18 @@ export default function HomePage() {
         {/* 文字內容 */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4"
           style={{ zIndex: 3 }}>
-          <h1 className="text-3xl md:text-5xl font-medium text-white mb-3"
+          <Image
+            src="/images/杏仁弟弟.png"
+            alt="杏仁弟弟"
+            width={200}
+            height={200}
+          />
+          {/* <h1 className="text-3xl md:text-5xl font-medium text-white mb-3"
             style={{ textShadow: '0 2px 16px rgba(0,0,0,0.4)', letterSpacing: '-0.02em' }}>
             杏仁弟弟
-          </h1>
+          </h1> */}
           <p className="text-white/80 text-sm md:text-base">
-            手工杏仁甜品，限時現場取貨
+            手工杏仁甜品，滿2000元外送到府
           </p>
         </div>
       </section>
