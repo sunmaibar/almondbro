@@ -348,7 +348,7 @@ export default function HomePage() {
                       {p.label}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium truncate" style={{ color: 'var(--text)' }}>
+                      <div className="text-sm font-medium" style={{ color: 'var(--text)', wordBreak: 'break-word', whiteSpace: 'normal' }}>
                         {p.location}
                       </div>
                       <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
@@ -372,7 +372,7 @@ export default function HomePage() {
         {/* STEP 3：選擇商品 */}
         {selectedPoint && (
           <StepCard step={3} title="選擇商品" error={fieldErrors.cart}>
-            <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-3">
               {menuItems.map(item => {
                 const qty = getQty(item.id)
                 return (
@@ -401,8 +401,8 @@ export default function HomePage() {
                     </div>
 
                     {/* 商品資訊 + 數量控制 */}
-                    <div className="flex items-center gap-3 px-4 py-3">
-                      <div className="flex-1 min-w-0">
+                    <div className="px-3 py-3">
+                      <div className="mb-2">
                         <div className="font-medium text-sm" style={{ color: 'var(--text)' }}>
                           {item.name}
                         </div>
@@ -417,7 +417,7 @@ export default function HomePage() {
                       </div>
 
                       {/* 數量控制 */}
-                      <div className="flex items-center gap-2 flex-shrink-0">
+                      <div className="flex items-center justify-between">
                         <button
                           onClick={() => setQuantity(item, qty - 1)}
                           disabled={qty === 0}
@@ -429,7 +429,7 @@ export default function HomePage() {
                           }}>
                           −
                         </button>
-                        <span className="w-6 text-center text-sm font-medium" style={{ color: 'var(--text)' }}>
+                        <span className="text-sm font-medium" style={{ color: 'var(--text)' }}>
                           {qty}
                         </span>
                         <button
