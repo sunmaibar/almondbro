@@ -166,21 +166,37 @@ export default function ScheduleTab({
   setSaving(true)
   const dateStr = toISODate(selectedDate)
 
-  const existing = publishedSchedules.find(s => s.date === dateStr)
-  if (existing) await supabase.from('schedules').delete().eq('id', existing.id)
+  if (editingScheduleId) {
+   // 編輯模式：刪除舊的再重建
+   await supabase.from('schedules').delete().eq('id', editingScheduleId)
 
-  const { data: schedule, error } = await supabase
-   .from('schedules')
-   .insert({ date: dateStr, district: selectedDistrict.name })
-   .select()
-   .single()
+   const { data: schedule, error } = await supabase
+    .from('schedules')
+    .insert({ date: dateStr, district: selectedDistrict.name })
+    .select()
+    .single()
 
-  if (error || !schedule) { setSaving(false); return }
+   if (error || !schedule) { setSaving(false); return }
 
-  await supabase.from('pickup_points').insert(
-   points.map(p => ({ ...p, schedule_id: schedule.id }))
-  )
+   await supabase.from('pickup_points').insert(
+    points.map(p => ({ ...p, schedule_id: schedule.id }))
+   )
+  } else {
+   // 新增模式：不刪除現有行程，直接新增
+   const { data: schedule, error } = await supabase
+    .from('schedules')
+    .insert({ date: dateStr, district: selectedDistrict.name })
+    .select()
+    .single()
 
+   if (error || !schedule) { setSaving(false); return }
+
+   await supabase.from('pickup_points').insert(
+    points.map(p => ({ ...p, schedule_id: schedule.id }))
+   )
+  }
+
+  // 更新預設取貨點
   await supabase.from('district_default_points').delete().eq('district_id', selectedDistrict.id)
   await supabase.from('district_default_points').insert(
    points.map(p => ({ ...p, district_id: selectedDistrict.id }))
